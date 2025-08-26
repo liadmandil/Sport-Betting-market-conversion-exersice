@@ -1,7 +1,4 @@
-package sportbet.io;
-
-import sportbet.errors.DomainException;
-import sportbet.errors.ErrorCode;
+package sportbet.errors;
 
 /**
  * MissingFileException indicates that the provided path does not exist,

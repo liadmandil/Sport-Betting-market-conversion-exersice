@@ -1,7 +1,4 @@
-package sportbet.io;
-
-import sportbet.errors.DomainException;
-import sportbet.errors.ErrorCode;
+package sportbet.errors;
 
 /**
  * FileFormatException indicates the JSON structure is not as expected,

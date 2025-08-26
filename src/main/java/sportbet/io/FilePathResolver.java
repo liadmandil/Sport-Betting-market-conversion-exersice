@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import sportbet.errors.MissingFileException;
+
 /**
  * Utility class for resolving input and output file paths automatically.
  * Supports automatic directory resolution for input_files and output_files.
@@ -15,6 +17,7 @@ public class FilePathResolver {
     private static final String OUTPUT_DIR = "output_files";
     private static final String OUTPUT_SUFFIX = "_output";
     
+
     /**
      * Resolves the input file path by looking in the input_files directory.
      * If the file doesn't exist in input_files, treats the filename as an absolute path.
@@ -23,6 +26,7 @@ public class FilePathResolver {
      * @return Path to the input file
      * @throws MissingFileException if the file doesn't exist
      */
+
     public static Path resolveInputPath(String filename) throws MissingFileException {
         // If it's already a full path, use it as is
         Path directPath = Paths.get(filename);

@@ -1,5 +1,6 @@
 package sportbet.app;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import sportbet.core.MarketConverter;
+import sportbet.errors.MissingFileException;
 import sportbet.io.FilePathResolver;
 import sportbet.io.JacksonListMarketReader;
 import sportbet.model.ParsedMarket;
@@ -35,10 +37,12 @@ public class Main {
             System.out.println("Input file: " + inputPath.toAbsolutePath());
             System.out.println("Output file: " + outputPath.toAbsolutePath());
             
+
             // Read input file
             JacksonListMarketReader reader = new JacksonListMarketReader();
             List<RawMarket> rawMarkets = reader.read(inputPath);
             
+
             System.out.println("=== Market Conversion ===");
             System.out.println("Loaded " + rawMarkets.size() + " markets:");
             
@@ -74,8 +78,15 @@ public class Main {
             System.out.println("\n=== JSON File Content ===");
             System.out.println(mapper.writeValueAsString(parsedMarkets));
             
+        } catch (MissingFileException e) {
+            System.err.println("File error: " + e.getMessage());
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("I/O error: " + e.getMessage());
+            System.exit(1);
         } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            System.err.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
             System.exit(1);
         }
     }

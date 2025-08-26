@@ -1,0 +1,19 @@
+[
+  {
+    "name": "1x2",
+    "event_id": "999999",
+    "selections": [
+      {"name": "Team A", "odds": 2.1},
+      {"name": "draw", "odds": 3.4},
+      {"name": "Team B", "odds": 2.8}
+    ]
+  },
+  {
+    "name": "Total",
+    "event_id": "999999",
+    "selections": [
+      {"name": "Over", "odds": 1.9},
+      {"name": "Under", "odds": 1.9}
+    ]
+  }
+]

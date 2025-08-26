@@ -1,16 +1,18 @@
 package sportbet.io;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import sportbet.errors.DomainException;
-import sportbet.errors.ErrorCode;
-import sportbet.model.RawMarket;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import sportbet.errors.DomainException;
+import sportbet.errors.ErrorCode;
+import sportbet.errors.MissingFileException;
+import sportbet.model.RawMarket;
 
 /**
   Jackson-based reader that deserializes the entire JSON array into List<RawMarket>.
@@ -21,7 +23,7 @@ public class JacksonListMarketReader implements JsonMarketListReader {
 
     public JacksonListMarketReader() {
         this.mapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);  // check about FAIL_ON_UNKNOWN_PROPERTIES
     }
 
     @Override

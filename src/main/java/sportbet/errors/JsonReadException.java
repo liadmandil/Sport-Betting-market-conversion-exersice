@@ -1,7 +1,4 @@
-package sportbet.io;
-
-import sportbet.errors.DomainException;
-import sportbet.errors.ErrorCode;
+package sportbet.errors;
 
 /**
  * JsonReadException represents low-level failures while reading/parsing JSON

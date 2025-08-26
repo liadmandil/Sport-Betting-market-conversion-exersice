@@ -62,6 +62,7 @@ public class MarketConverter {
     /**
      * חילוץ specifiers לפי סוג השוק
      */
+
     private Map<String, String> extractSpecifiers(RawMarket rawMarket, MarketType marketType) {
         Map<String, String> specifiers = new HashMap<>();
         
