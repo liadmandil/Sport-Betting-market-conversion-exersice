@@ -26,7 +26,7 @@ public class Main {
 
         try {
             // Ensure output directory exists
-            FilePathResolver.ensureOutputDirectoryExists();
+            FilePathResolver.ensureOutputDirectoryExists(); 
             
             // Resolve input and output paths
             String inputFilename = args[0];
@@ -74,7 +74,7 @@ public class Main {
             System.out.println("Converted " + parsedMarkets.size() + " out of " + rawMarkets.size() + " markets");
             System.out.println("JSON file saved to: " + outputPath.toAbsolutePath());
             
-            
+
             // Print JSON content to console as well
             System.out.println("\n=== JSON File Content ===");
             System.out.println(mapper.writeValueAsString(parsedMarkets));

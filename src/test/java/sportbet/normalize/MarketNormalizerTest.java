@@ -96,7 +96,7 @@ class MarketNormalizerTest {
         String result = normalizer.extractHandicapValue("Team A +1.5");
 
         // Assert
-        assertEquals("1.5", result);
+        assertEquals("+1.5", result);
     }
 
     @Test

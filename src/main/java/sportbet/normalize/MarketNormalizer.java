@@ -117,8 +117,8 @@ public class MarketNormalizer {
     }
 
     /**
-     * Extracts handicap value from selection name
-     * Example: "Team A +1.5" → "1.5"
+     * Extracts handicap value from selection name with sign preserved
+     * Example: "Team A +1.5" → "+1.5", "Team B -0.5" → "-0.5"
      */
     public String extractHandicapValue(String selectionName) {
         NumberExtractionParams params = new NumberExtractionParams(
@@ -128,11 +128,7 @@ public class MarketNormalizer {
         );
         String result = extractNumber(params);
         
-        // Remove + sign if exists
-        if (result.startsWith("+")) {
-            result = result.substring(1);
-        }
-        
+        // Keep the sign as is - don't remove + sign
         return result;
     }
 
