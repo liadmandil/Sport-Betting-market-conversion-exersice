@@ -66,7 +66,7 @@ public class MarketConverterTest {
             
             for (int i = 0; i < parsed.getSelections().size(); i++) {
                 ParsedSelection sel = parsed.getSelections().get(i);
-                System.out.printf("   %d. Selection ID: %d, UID: %s, Odds: %.2f%n", 
+                System.out.printf("   %d. Selection ID: %s, UID: %s, Odds: %.2f%n", 
                     i + 1, sel.getSelection_type_id(), sel.getSelection_uid(), sel.getDecimal_odds());
             }
             
@@ -102,7 +102,7 @@ public class MarketConverterTest {
             
             for (int i = 0; i < parsed.getSelections().size(); i++) {
                 ParsedSelection sel = parsed.getSelections().get(i);
-                System.out.printf("   %d. Selection ID: %d, UID: %s, Odds: %.2f%n", 
+                System.out.printf("   %d. Selection ID: %s, UID: %s, Odds: %.2f%n", 
                     i + 1, sel.getSelection_type_id(), sel.getSelection_uid(), sel.getDecimal_odds());
             }
             
@@ -138,7 +138,7 @@ public class MarketConverterTest {
             
             for (int i = 0; i < parsed.getSelections().size(); i++) {
                 ParsedSelection sel = parsed.getSelections().get(i);
-                System.out.printf("   %d. Selection ID: %d, UID: %s, Odds: %.2f%n", 
+                System.out.printf("   %d. Selection ID: %s, UID: %s, Odds: %.2f%n", 
                     i + 1, sel.getSelection_type_id(), sel.getSelection_uid(), sel.getDecimal_odds());
             }
             
@@ -174,7 +174,7 @@ public class MarketConverterTest {
             
             for (int i = 0; i < parsed.getSelections().size(); i++) {
                 ParsedSelection sel = parsed.getSelections().get(i);
-                System.out.printf("   %d. Selection ID: %d, UID: %s, Odds: %.2f%n", 
+                System.out.printf("   %d. Selection ID: %s, UID: %s, Odds: %.2f%n", 
                     i + 1, sel.getSelection_type_id(), sel.getSelection_uid(), sel.getDecimal_odds());
             }
             

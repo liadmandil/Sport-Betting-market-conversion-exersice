@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import sportbet.errors.DomainException;
 import sportbet.errors.ErrorCode;
+import sportbet.errors.FileFormatException;
+import sportbet.errors.JsonReadException;
 import sportbet.errors.MissingFileException;
 import sportbet.model.RawMarket;
 

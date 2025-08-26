@@ -149,10 +149,21 @@ public class ParsedMarketValidator {
         }
 
         // בדיקת Selection Type ID
-        int selectionTypeId = selection.getSelection_type_id();
-        if (selectionTypeId <= 0) {
+        String selectionTypeId = selection.getSelection_type_id();
+        if (selectionTypeId == null || selectionTypeId.trim().isEmpty()) {
             throw new DomainException(ErrorCode.VALIDATION_ERROR, 
-                "Selection Type ID at index " + index + " must be positive");
+                "Selection Type ID at index " + index + " cannot be null or empty");
+        }
+        
+        try {
+            int numericId = Integer.parseInt(selectionTypeId);
+            if (numericId <= 0) {
+                throw new DomainException(ErrorCode.VALIDATION_ERROR, 
+                    "Selection Type ID at index " + index + " must be positive");
+            }
+        } catch (NumberFormatException e) {
+            throw new DomainException(ErrorCode.VALIDATION_ERROR, 
+                "Selection Type ID at index " + index + " must be a valid number");
         }
 
         // בדיקת Decimal Odds

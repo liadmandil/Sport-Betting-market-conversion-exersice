@@ -6,12 +6,12 @@ package sportbet.model;
  */
 public class ParsedSelection {
     private String selection_uid;
-    private int selection_type_id;
+    private String selection_type_id;
     private double decimal_odds;
 
     public ParsedSelection() {}
 
-    public ParsedSelection(String selection_uid, int selection_type_id, double decimal_odds) {
+    public ParsedSelection(String selection_uid, String selection_type_id, double decimal_odds) {
         this.selection_uid = selection_uid;
         this.selection_type_id = selection_type_id;
         this.decimal_odds = decimal_odds;
@@ -25,11 +25,11 @@ public class ParsedSelection {
         this.selection_uid = selection_uid;
     }
 
-    public int getSelection_type_id() {
+    public String getSelection_type_id() {
         return selection_type_id;
     }
 
-    public void setSelection_type_id(int selection_type_id) {
+    public void setSelection_type_id(String selection_type_id) {
         this.selection_type_id = selection_type_id;
     }
 

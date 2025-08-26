@@ -161,7 +161,7 @@ public class MarketConverter {
         
         return new ParsedSelection(
             selectionUid,
-            selectionTypeIdOpt.get(),
+            String.valueOf(selectionTypeIdOpt.get()),
             rawSelection.getOdds()
         );
     }
