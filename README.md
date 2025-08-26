@@ -1,6 +1,75 @@
 # 🎯 SportBet Market Conversion System
 
-A system for converting sports betting markets - converts raw market data to structured format with unique UIDs.
+A comprehensive system for converting sports betting markets - transforms raw market data into standardized format with unique identifiers and structured metadata.
+
+## 🌟 What This System Does
+
+### 📊 The Problem
+Sports betting companies receive raw market data from various data providers, where each provider uses different naming conventions for the same betting markets. For example:
+- "1x2" might appear as "Match Winner", "Win Draw Win", or "Three Way"
+- Handicap values like "+1.5" or "-0.5" are embedded in selection names inconsistently
+- No standardized unique identifiers exist for markets and selections
+- Total values (Over/Under) are mixed with selection names
+
+### 🎯 The Solution
+This system provides **intelligent market normalization** that:
+
+#### **🔍 Automatic Market Recognition**
+- Identifies 6+ common betting market types (1x2, Total, Handicap, BTTS, etc.)
+- Maps different naming conventions to standardized market types
+- Supports full-time, 1st half, and 2nd half variations
+
+#### **🏷️ Standardized Identification System**
+- **Market UIDs**: `{event_id}_{market_type_id}_{specifier}`
+- **Selection UIDs**: `{market_uid}_{selection_type_id}`
+- **Deterministic**: Same input always produces same UIDs
+
+#### **⚙️ Smart Specifier Extraction**
+- **Total Markets**: Extracts threshold values (e.g., "Over 2.5" → `{"total": "2.5"}`)
+- **Handicap Markets**: Preserves direction with sign (e.g., "Team A +1.5" → `{"hcp": "+1.5"}`)
+- **Clean Mapping**: Removes numeric noise while preserving essential information
+
+#### **🎲 Selection Type Mapping**
+Converts text-based selections to standardized IDs:
+- `"Team A"` → `selection_type_id: "1"`
+- `"Draw"` → `selection_type_id: "2"`
+- `"Over"` → `selection_type_id: "12"`
+- `"Under"` → `selection_type_id: "13"`
+
+### 🏠 Handicap Direction Convention
+
+**Important**: The system follows a **Home Team (Team A) perspective** for handicap direction:
+
+- **Positive Values (`+1.5`)**: Team A receives advantage
+- **Negative Values (`-0.5`)**: Team A receives disadvantage (Team B advantage)
+- **Zero (`0`)**: No handicap applied
+
+#### Example:
+```json
+{
+  "market_uid": "123456_16_+1.5",
+  "specifiers": {
+    "hcp": "+1.5"  // Team A gets +1.5 points advantage
+  },
+  "selections": [
+    {
+      "selection_type_id": "1714",  // Team A selection
+      "decimal_odds": 1.8
+    },
+    {
+      "selection_type_id": "1715",  // Team B selection  
+      "decimal_odds": 2.0
+    }
+  ]
+}
+```
+
+### 💼 Business Value
+- **Automation**: Replaces hours of manual work with seconds of processing
+- **Standardization**: All markets represented in uniform format
+- **Scalability**: Processes thousands of markets efficiently
+- **Accuracy**: 100% consistent mapping with zero human error
+- **Integration**: Ready for downstream systems (trading platforms, analytics, etc.)
 
 ## 🚀 How to Run the Project
 
@@ -22,23 +91,66 @@ mvn clean package
 ```
 
 
-#### 3. Run the System
+#### 3. Prepare Input Files
+
+**📁 IMPORTANT: Place your input files in the `input_files/` directory**
+
+The system automatically searches for files in the `input_files/` directory. To process your market data:
+
+1. **Create your JSON file** with the following structure:
+   ```json
+   [
+     {
+       "name": "1x2",
+       "event_id": "123456",
+       "selections": [
+         {"name": "Team A", "odds": 1.65},
+         {"name": "draw", "odds": 3.2},
+         {"name": "Team B", "odds": 2.6}
+       ]
+     }
+   ]
+   ```
+
+2. **Save the file** in the `input_files/` directory:
+   ```
+   input_files/
+   ├── your_markets.json          ← Your file goes here
+   ├── market_input_example.json  ← Example file provided
+   └── all_markets.json           ← Sample with all market types
+   ```
+
+3. **File Requirements**:
+   - Format: JSON array of market objects
+   - Each market must have: `name`, `event_id`, `selections`
+   - Each selection must have: `name`, `odds`
+   - Encoding: UTF-8
+
+#### 4. Run the System
 ```bash
-# Simple usage - just provide the filename (searches in INPUT_FILES directory)
+# Simple usage - just provide the filename (the system searches in input_files/)
 java -jar target/market-conversion-0.1.0-SNAPSHOT.jar <filename>
 
 # Examples:
 java -jar target/market-conversion-0.1.0-SNAPSHOT.jar market_input_example.json
-java -jar target/market-conversion-0.1.0-SNAPSHOT.jar test_markets.json
+java -jar target/market-conversion-0.1.0-SNAPSHOT.jar your_markets.json
+java -jar target/market-conversion-0.1.0-SNAPSHOT.jar all_markets.json
 ```
 
-**How it works:**
-- **Input**: Place your JSON files in the `input_files/` directory
-- **Automatic Resolution**: Just provide the filename, the system will find it automatically
-- **Output**: Files are automatically saved in `output_files/` with `_output` suffix
-- **Example**: `test_markets.json` → `test_markets_output.json`
+**📋 Processing Flow:**
+1. **Input**: System reads from `input_files/{filename}`
+2. **Processing**: Converts raw markets to standardized format
+3. **Output**: Saves result to `output_files/{filename}_output.json`
+4. **Console**: Displays conversion summary and JSON content
 
-#### 4. Run Tests
+**Example:**
+```bash
+java -jar target/market-conversion-0.1.0-SNAPSHOT.jar my_data.json
+# Reads: input_files/my_data.json
+# Creates: output_files/my_data_output.json
+```
+
+#### 5. Run Tests
 ```bash
 mvn test
 ```
@@ -61,11 +173,110 @@ project-root/
 
 ## 📋 Input and Output Format
 
-### Input File (JSON)
+### 📥 Input File Structure (JSON)
+
+**Place your input file in `input_files/` directory**
+
 ```json
 [
   {
     "name": "1x2",
+    "event_id": "123456",
+    "selections": [
+      {"name": "Team A", "odds": 1.65},
+      {"name": "draw", "odds": 3.2},
+      {"name": "Team B", "odds": 2.6}
+    ]
+  },
+  {
+    "name": "Handicap",
+    "event_id": "123456",
+    "selections": [
+      {"name": "Team A +1.5", "odds": 1.8},
+      {"name": "Team B -1.5", "odds": 2.0}
+    ]
+  },
+  {
+    "name": "Total",
+    "event_id": "123456",
+    "selections": [
+      {"name": "over 2.5", "odds": 1.85},
+      {"name": "under 2.5", "odds": 1.95}
+    ]
+  }
+]
+```
+
+### 📤 Output File Structure (JSON)
+
+**Automatically saved to `output_files/` directory**
+
+```json
+[
+  {
+    "market_uid": "123456_1",
+    "market_type_id": "1",
+    "specifiers": {},
+    "selections": [
+      {
+        "selection_uid": "123456_1_1",
+        "selection_type_id": "1",
+        "decimal_odds": 1.65
+      },
+      {
+        "selection_uid": "123456_1_2",
+        "selection_type_id": "2",
+        "decimal_odds": 3.2
+      },
+      {
+        "selection_uid": "123456_1_3",
+        "selection_type_id": "3",
+        "decimal_odds": 2.6
+      }
+    ]
+  },
+  {
+    "market_uid": "123456_16_+1.5",
+    "market_type_id": "16",
+    "specifiers": {
+      "hcp": "+1.5"
+    },
+    "selections": [
+      {
+        "selection_uid": "123456_16_+1.5_1714",
+        "selection_type_id": "1714",
+        "decimal_odds": 1.8
+      },
+      {
+        "selection_uid": "123456_16_+1.5_1715",
+        "selection_type_id": "1715",
+        "decimal_odds": 2.0
+      }
+    ]
+  }
+]
+```
+
+### 🔍 Key Transformations
+
+#### **Market Identification**
+- `"1x2"` → `market_type_id: "1"`
+- `"Handicap"` → `market_type_id: "16"`
+- `"Total"` → `market_type_id: "18"`
+
+#### **Selection Mapping**
+- `"Team A"` → `selection_type_id: "1"`
+- `"draw"` → `selection_type_id: "2"`
+- `"over"` → `selection_type_id: "12"`
+- `"under"` → `selection_type_id: "13"`
+
+#### **Specifier Extraction**
+- `"Team A +1.5"` → `{"hcp": "+1.5"}` (Home team advantage)
+- `"over 2.5"` → `{"total": "2.5"}` (Threshold value)
+
+#### **UID Generation**
+- **Market UID**: `{event_id}_{market_type_id}_{specifier}`
+- **Selection UID**: `{market_uid}_{selection_type_id}`
     "event_id": "123456",
     "selections": [
       {"name": "Team A", "odds": 1.65},
@@ -96,13 +307,180 @@ project-root/
 
 ## 🏆 Supported Market Types
 
-- **1x2** (Market Type 1)
-- **Total** (Market Type 18) - with specifier
-- **1st Half Total** (Market Type 68) - with specifier  
-- **Handicap** (Market Type 16) - with specifier
-- **1st Half Handicap** (Market Type 66) - with specifier
-- **2nd Half Handicap** (Market Type 88) - with specifier
-- **Both Teams to Score** (Market Type 50)
+The system recognizes and converts 7 major sports betting market types:
+
+### 📊 Market Type Mapping
+
+| Market Name | Market Type ID | Specifier Required | Description |
+|-------------|----------------|-------------------|-------------|
+| **1x2** | `1` | No | Match result (Home/Draw/Away) |
+| **Total** | `18` | Yes | Over/Under full-time |
+| **1st Half Total** | `68` | Yes | Over/Under first half |
+| **Handicap** | `16` | Yes | Point spread full-time |
+| **1st Half Handicap** | `66` | Yes | Point spread first half |
+| **2nd Half Handicap** | `88` | Yes | Point spread second half |
+| **Both Teams to Score** | `50` | No | Yes/No BTTS |
+
+### 🎯 Selection Type IDs
+
+#### **1x2 Markets**
+- `selection_type_id: "1"` → Team A (Home)
+- `selection_type_id: "2"` → Draw
+- `selection_type_id: "3"` → Team B (Away)
+
+#### **Total Markets (Over/Under)**
+- `selection_type_id: "12"` → Over (threshold)
+- `selection_type_id: "13"` → Under (threshold)
+
+#### **Handicap Markets**
+- `selection_type_id: "1714"` → Team A selection
+- `selection_type_id: "1715"` → Team B selection
+
+#### **Both Teams to Score**
+- `selection_type_id: "10"` → Yes
+- `selection_type_id: "11"` → No
+
+### 🏠 Critical Convention: Home Team Handicap Direction
+
+**⚠️ IMPORTANT ASSUMPTION**: The system follows **Home Team (Team A) perspective** for handicap direction:
+
+#### **Positive Handicap (+)**
+```json
+{
+  "name": "Team A +1.5",    // Input
+  "specifiers": {
+    "hcp": "+1.5"           // Output: Team A gets 1.5 point advantage
+  }
+}
+```
+- **Meaning**: Home team (Team A) receives point advantage
+- **Betting Logic**: Team A wins if they win OR lose by less than 1.5 points
+
+#### **Negative Handicap (-)**
+```json
+{
+  "name": "Team B -0.5",    // Input
+  "specifiers": {
+    "hcp": "-0.5"           // Output: Team A gets 0.5 point disadvantage
+  }
+}
+```
+- **Meaning**: Home team (Team A) receives point disadvantage (Away team advantage)
+- **Betting Logic**: Team A wins only if they win by more than 0.5 points
+
+#### **Real-World Examples**
+
+**Basketball Game: Lakers vs Warriors**
+- **Input**: `"Lakers +3.5"` (Lakers are underdogs)
+- **Output**: `{"hcp": "+3.5"}` (Lakers get 3.5 point bonus)
+- **Result**: Lakers win bet if: score difference ≤ 3 points
+
+**Football Game: Barcelona vs Real Madrid** 
+- **Input**: `"Barcelona -1"` (Barcelona favored)
+- **Output**: `{"hcp": "-1"}` (Barcelona must overcome 1 point deficit)
+- **Result**: Barcelona wins bet if: they win by 2+ goals
+
+### 🔄 UID Generation Examples
+
+#### **Simple Markets (No Specifier)**
+```
+1x2: 123456_1
+BTTS: 123456_50
+```
+
+#### **Markets with Specifiers**
+```
+Total 2.5: 123456_18_2.5
+Handicap +1.5: 123456_16_+1.5
+1st Half HCP +0.5: 123456_66_+0.5
+```
+
+#### **Selection UIDs**
+```
+Team A in 1x2: 123456_1_1
+Over 2.5: 123456_18_2.5_12
+Team A +1.5: 123456_16_+1.5_1714
+```
+
+## 📁 Input Files Usage
+
+### 🎯 Using the `input_files/` Directory
+
+The project includes a comprehensive `input_files/` directory with example JSON files for each market type:
+
+#### **🔧 Individual Market Type Files**
+```
+input_files/
+├── 1x2_markets.json          # Match result examples
+├── total_markets.json        # Over/Under examples
+├── handicap_markets.json     # Point spread examples
+├── btts_markets.json         # Both Teams to Score examples
+└── all_markets.json          # Combined examples
+```
+
+#### **💡 How to Use Input Files**
+
+**1. Test Individual Market Types:**
+```bash
+# Test only 1x2 markets
+java -jar target/market-conversion-0.1.0-SNAPSHOT-shaded.jar input_files/1x2_markets.json output_1x2.json
+
+# Test only handicap markets  
+java -jar target/market-conversion-0.1.0-SNAPSHOT-shaded.jar input_files/handicap_markets.json output_hcp.json
+```
+
+**2. Test All Market Types:**
+```bash
+# Convert all market types at once
+java -jar target/market-conversion-0.1.0-SNAPSHOT-shaded.jar input_files/all_markets.json output_all.json
+```
+
+**3. Create Your Own Input:**
+```bash
+# Use any of the example files as templates
+cp input_files/handicap_markets.json my_custom_markets.json
+# Edit my_custom_markets.json with your data
+java -jar target/market-conversion-0.1.0-SNAPSHOT-shaded.jar my_custom_markets.json my_output.json
+```
+
+#### **📋 Input File Format Requirements**
+
+Each input file must follow this exact JSON structure:
+```json
+{
+  "markets": [
+    {
+      "id": "numeric_string",
+      "name": "descriptive_market_name", 
+      "selections": [
+        {
+          "id": "numeric_string",
+          "name": "selection_description"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### **⚠️ Critical Input Conventions**
+
+1. **Market Names Must Match**: Use exact naming patterns:
+   - `"1x2"` for match result
+   - `"Total 2.5"` for totals (with decimal specifier)
+   - `"Team A +1.5"` for handicaps (with +/- and decimal)
+   - `"Both Teams to Score"` for BTTS
+
+2. **Selection Names Must Include Team Indicators**:
+   - Use `"Team A"` for home team selections
+   - Use `"Team B"` for away team selections  
+   - Use `"Over"/"Under"` for total markets
+   - Use `"Yes"/"No"` for BTTS markets
+
+3. **Handicap Direction Rules**:
+   - Always specify sign: `"Team A +1.5"` or `"Team B -0.5"`
+   - System preserves signs based on home team perspective
+   - Positive = Team A advantage, Negative = Team A disadvantage
 
 ## 🏗️ Project Architecture & File Structure
 
@@ -265,6 +643,21 @@ The project includes comprehensive JUnit 5 test coverage with 35 passing tests:
 - **Validation Tests**: Error handling and edge case testing
 - **Parameter Tests**: Testing parameter object functionality
 
----
+## 🎯 System Assumptions & Business Logic
 
-**The project is ready to use!** 🎉
+### 🏠 Critical Home Team Convention
+
+**⚠️ CORE ASSUMPTION**: The entire system is built around the **"Home Team (Team A) Perspective"** for handicap betting:
+
+#### **Business Rationale**
+- **Industry Standard**: Most sportsbooks display handicaps from the home team perspective
+- **User Experience**: Bettors expect consistent handicap direction across platforms
+- **Data Integrity**: Ensures all conversions maintain the same directional logic
+
+
+
+#### **Real-World Impact**
+- **Input**: `"Barcelona -1.5"` (Barcelona must win by 2+ goals)
+- **Output**: `{"hcp": "-1.5"}` (Barcelona starts with 1.5 goal deficit)
+- **Betting Logic**: Barcelona wins bet only if final score difference > 1.5
+
