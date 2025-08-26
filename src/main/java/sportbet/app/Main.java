@@ -74,10 +74,14 @@ public class Main {
             System.out.println("Converted " + parsedMarkets.size() + " out of " + rawMarkets.size() + " markets");
             System.out.println("JSON file saved to: " + outputPath.toAbsolutePath());
             
+            
             // Print JSON content to console as well
             System.out.println("\n=== JSON File Content ===");
             System.out.println(mapper.writeValueAsString(parsedMarkets));
             
+
+
+
         } catch (MissingFileException e) {
             System.err.println("File error: " + e.getMessage());
             System.exit(1);

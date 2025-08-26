@@ -11,12 +11,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * JUnit tests עבור UidGenerator
+ * JUnit tests for UidGenerator
  */
 class UidGeneratorTest {
 
     @Test
-    @DisplayName("יצירת Market UID עם specifiers")
+    @DisplayName("Generate Market UID with specifiers")
     void generateMarketUid_withSpecifiers() {
         // Arrange
         UidGenerator.MarketUidParams params = new UidGenerator.MarketUidParams(
@@ -33,7 +33,7 @@ class UidGeneratorTest {
     }
 
     @Test
-    @DisplayName("יצירת Market UID ללא specifiers")
+    @DisplayName("Generate Market UID without specifiers")
     void generateMarketUid_withoutSpecifiers() {
         // Arrange
         UidGenerator.MarketUidParams params = new UidGenerator.MarketUidParams(
@@ -50,7 +50,7 @@ class UidGeneratorTest {
     }
 
     @Test
-    @DisplayName("יצירת Selection UID")
+    @DisplayName("Generate Selection UID")
     void generateSelectionUid_success() {
         // Arrange
         UidGenerator.SelectionUidParams params = new UidGenerator.SelectionUidParams(
@@ -66,7 +66,7 @@ class UidGeneratorTest {
     }
 
     @Test
-    @DisplayName("שגיאה כאשר eventId הוא null")
+    @DisplayName("Error when eventId is null")
     void generateMarketUid_nullEventId_throwsException() {
         // Assert
         assertThrows(NullPointerException.class, () -> {
@@ -75,7 +75,7 @@ class UidGeneratorTest {
     }
 
     @Test
-    @DisplayName("שגיאה כאשר marketTypeId הוא null")
+    @DisplayName("Error when marketTypeId is null")
     void generateMarketUid_nullMarketTypeId_throwsException() {
         // Assert
         assertThrows(NullPointerException.class, () -> {
@@ -84,7 +84,7 @@ class UidGeneratorTest {
     }
 
     @Test
-    @DisplayName("שגיאה כאשר marketUid הוא null ב-SelectionUidParams")
+    @DisplayName("Error when marketUid is null in SelectionUidParams")
     void generateSelectionUid_nullMarketUid_throwsException() {
         // Assert
         assertThrows(NullPointerException.class, () -> {
@@ -93,14 +93,14 @@ class UidGeneratorTest {
     }
 
     @Test
-    @DisplayName("בדיקת תקינות Market UID - תקין")
+    @DisplayName("Market UID validation - valid")
     void isValidMarketUid_valid() {
         assertTrue(UidGenerator.isValidMarketUid("123456_18"));
         assertTrue(UidGenerator.isValidMarketUid("123456_18_2.5"));
     }
 
     @Test
-    @DisplayName("בדיקת תקינות Market UID - לא תקין")
+    @DisplayName("Market UID validation - invalid")
     void isValidMarketUid_invalid() {
         assertFalse(UidGenerator.isValidMarketUid(null));
         assertFalse(UidGenerator.isValidMarketUid(""));
@@ -109,14 +109,14 @@ class UidGeneratorTest {
     }
 
     @Test
-    @DisplayName("בדיקת תקינות Selection UID - תקין")
+    @DisplayName("Selection UID validation - valid")
     void isValidSelectionUid_valid() {
         assertTrue(UidGenerator.isValidSelectionUid("123456_18_12"));
         assertTrue(UidGenerator.isValidSelectionUid("123456_18_2.5_12"));
     }
 
     @Test
-    @DisplayName("בדיקת תקינות Selection UID - לא תקין")
+    @DisplayName("Selection UID validation - invalid")
     void isValidSelectionUid_invalid() {
         assertFalse(UidGenerator.isValidSelectionUid(null));
         assertFalse(UidGenerator.isValidSelectionUid(""));
@@ -125,21 +125,21 @@ class UidGeneratorTest {
     }
 
     @Test
-    @DisplayName("חילוץ Event ID מ-Market UID")
+    @DisplayName("Extract Event ID from Market UID")
     void extractEventId_success() {
         assertEquals("123456", UidGenerator.extractEventId("123456_18"));
         assertEquals("123456", UidGenerator.extractEventId("123456_18_2.5"));
     }
 
     @Test
-    @DisplayName("חילוץ Market Type ID מ-Market UID")
+    @DisplayName("Extract Market Type ID from Market UID")
     void extractMarketTypeId_success() {
         assertEquals("18", UidGenerator.extractMarketTypeId("123456_18"));
         assertEquals("18", UidGenerator.extractMarketTypeId("123456_18_2.5"));
     }
 
     @Test
-    @DisplayName("חילוץ Specifier Value מ-Market UID")
+    @DisplayName("Extract Specifier Value from Market UID")
     void extractSpecifierValue_success() {
         assertNull(UidGenerator.extractSpecifierValue("123456_18"));
         assertEquals("2.5", UidGenerator.extractSpecifierValue("123456_18_2.5"));

@@ -9,12 +9,12 @@ import sportbet.model.RawMarket;
 import sportbet.model.RawSelection;
 
 /**
- * מחלקה לולידציה של נתוני Raw Markets
+ * Class for validation of Raw Market data
  */
 public class RawMarketValidator {
 
     /**
-     * פרמטרים לולידציה של Raw Market
+     * Parameters for Raw Market validation
      */
     public static class ValidationParams {
         private final RawMarket rawMarket;
@@ -35,10 +35,10 @@ public class RawMarketValidator {
     }
 
     /**
-     * מבצע ולידציה מלאה על Raw Market
+     * Performs full validation on Raw Market
      * 
-     * @param params פרמטרי הולידציה
-     * @throws DomainException אם הנתונים לא תקינים
+     * @param params validation parameters
+     * @throws DomainException if data is invalid
      */
     public void validate(ValidationParams params) {
         RawMarket market = params.getRawMarket();
@@ -50,7 +50,7 @@ public class RawMarketValidator {
     }
 
     /**
-     * בודק תקינות שם השוק
+     * Validates market name
      */
     private void validateMarketName(String name, boolean strictMode) {
         if (name == null || name.trim().isEmpty()) {
@@ -63,7 +63,7 @@ public class RawMarketValidator {
     }
 
     /**
-     * בודק תקינות מזהה האירוע
+     * Validates event ID
      */
     private void validateEventId(String eventId, boolean strictMode) {
         if (eventId == null || eventId.trim().isEmpty()) {
@@ -83,7 +83,7 @@ public class RawMarketValidator {
     }
 
     /**
-     * בודק תקינות הselections
+     * Validates selections
      */
     private void validateSelections(List<RawSelection> selections, boolean strictMode) {
         if (selections == null || selections.isEmpty()) {
@@ -101,7 +101,7 @@ public class RawMarketValidator {
     }
 
     /**
-     * בודק תקינות selection בודד
+     * Validates individual selection
      */
     private void validateSelection(RawSelection selection, int index, boolean strictMode) {
         if (selection == null) {
@@ -109,13 +109,13 @@ public class RawMarketValidator {
                 "Selection at index " + index + " cannot be null");
         }
 
-        // בדיקת שם
+        // Name validation
         if (selection.getName() == null || selection.getName().trim().isEmpty()) {
             throw new DomainException(ErrorCode.VALIDATION_ERROR, 
                 "Selection name at index " + index + " cannot be null or empty");
         }
 
-        // בדיקת odds
+        // Odds validation
         if (selection.getOdds() == null) {
             throw new DomainException(ErrorCode.VALIDATION_ERROR, 
                 "Selection odds at index " + index + " cannot be null");

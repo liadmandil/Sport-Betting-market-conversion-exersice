@@ -5,12 +5,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * מחלקה לניקוי ונורמליזציה של נתוני שוקים
+ * Class for cleaning and normalizing market data
  */
 public class MarketNormalizer {
 
     /**
-     * פרמטרים לניקוי שם selection
+     * Parameters for cleaning selection name
      */
     public static class SelectionNameParams {
         private final String selectionName;
@@ -37,7 +37,7 @@ public class MarketNormalizer {
     }
 
     /**
-     * פרמטרים לחילוץ מספרים
+     * Parameters for number extraction
      */
     public static class NumberExtractionParams {
         private final String text;
@@ -68,21 +68,21 @@ public class MarketNormalizer {
     private static final Pattern POSITIVE_DECIMAL_PATTERN = Pattern.compile("(\\d+(?:\\.\\d+)?)");
 
     /**
-     * מנקה שם selection מסימנים ומספרים
+     * Cleans selection name from symbols and numbers
      * 
-     * @param params פרמטרי הניקוי
-     * @return שם נקי
+     * @param params cleaning parameters
+     * @return clean name
      */
     public String cleanSelectionName(SelectionNameParams params) {
         String name = params.getSelectionName();
         
         if (params.isRemoveNumbers()) {
-            // הסרת מספרים וסימנים כמו +1.5, -2.5, וכו'
+            // Remove numbers and symbols like +1.5, -2.5, etc.
             name = name.replaceAll("[+\\-]?\\d+(?:\\.\\d+)?", "");
         }
         
         if (params.isTrimWhitespace()) {
-            // הסרת רווחים מיותרים
+            // Remove extra whitespaces
             name = name.replaceAll("\\s+", " ").trim();
         }
         
@@ -90,10 +90,10 @@ public class MarketNormalizer {
     }
 
     /**
-     * מחלץ מספר מטקסט לפי pattern
+     * Extracts number from text according to pattern
      * 
-     * @param params פרמטרי החילוץ
-     * @return המספר שנמצא או ערך ברירת מחדל
+     * @param params extraction parameters
+     * @return the found number or default value
      */
     public String extractNumber(NumberExtractionParams params) {
         Matcher matcher = params.getPattern().matcher(params.getText());
@@ -104,8 +104,8 @@ public class MarketNormalizer {
     }
 
     /**
-     * מחלץ ערך total מתוך שם selection
-     * דוגמה: "over 2.5" → "2.5"
+     * Extracts total value from selection name
+     * Example: "over 2.5" → "2.5"
      */
     public String extractTotalValue(String selectionName) {
         NumberExtractionParams params = new NumberExtractionParams(
@@ -117,8 +117,8 @@ public class MarketNormalizer {
     }
 
     /**
-     * מחלץ ערך handicap מתוך שם selection
-     * דוגמה: "Team A +1.5" → "1.5"
+     * Extracts handicap value from selection name
+     * Example: "Team A +1.5" → "1.5"
      */
     public String extractHandicapValue(String selectionName) {
         NumberExtractionParams params = new NumberExtractionParams(
@@ -128,7 +128,7 @@ public class MarketNormalizer {
         );
         String result = extractNumber(params);
         
-        // הסרת סימן + אם קיים
+        // Remove + sign if exists
         if (result.startsWith("+")) {
             result = result.substring(1);
         }
@@ -137,7 +137,7 @@ public class MarketNormalizer {
     }
 
     /**
-     * נורמליזציה של שם market
+     * Normalization of market name
      */
     public String normalizeMarketName(String marketName) {
         if (marketName == null) return "";
@@ -145,7 +145,7 @@ public class MarketNormalizer {
     }
 
     /**
-     * נורמליזציה של שם selection לזיהוי
+     * Normalization of selection name for identification
      */
     public String normalizeSelectionForIdentification(String selectionName) {
         SelectionNameParams params = new SelectionNameParams(

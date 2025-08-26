@@ -1,11 +1,5 @@
 package sportbet.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import sportbet.io.JacksonListMarketReader;
-import sportbet.model.ParsedMarket;
-import sportbet.model.RawMarket;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -13,8 +7,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import sportbet.io.JacksonListMarketReader;
+import sportbet.model.ParsedMarket;
+import sportbet.model.RawMarket;
+
 /**
- * שירות המרה מהמקורות הרשמיים
+ * Conversion service from official sources
  */
 public class ConversionService {
     
@@ -30,7 +31,7 @@ public class ConversionService {
     }
     
     /**
-     * ממיר קובץ קלט לקובץ פלט
+     * Convert input file to output file
      */
     public void convertFile(String inputFilePath, String outputFilePath) {
         System.out.println("════════════════════════════════════════");
@@ -41,12 +42,12 @@ public class ConversionService {
         System.out.println();
         
         try {
-            // קריאת הקובץ
+            // Read the file
             Path inputPath = Paths.get(inputFilePath);
             List<RawMarket> rawMarkets = reader.read(inputPath);
             System.out.println("✅ Loaded " + rawMarkets.size() + " raw markets");
             
-            // המרה
+            // Conversion
             List<ParsedMarket> parsedMarkets = new ArrayList<>();
             int successCount = 0;
             int failCount = 0;
@@ -68,7 +69,7 @@ public class ConversionService {
                 }
             }
             
-            // כתיבת הקובץ
+            // Write the file
             File outputFile = new File(outputFilePath);
             jsonMapper.writeValue(outputFile, parsedMarkets);
             
@@ -83,7 +84,7 @@ public class ConversionService {
             System.out.println("💾 File size: " + String.format("%.2f KB", outputFile.length() / 1024.0));
             System.out.println("════════════════════════════════════════");
             
-            
+
         } catch (IOException e) {
             System.out.println("❌ FATAL ERROR: " + e.getMessage());
             e.printStackTrace();
@@ -94,7 +95,7 @@ public class ConversionService {
     }
     
     /**
-     * נקודת כניסה ראשית
+     * Main entry point
      */
     public static void main(String[] args) {
         if (args.length != 2) {

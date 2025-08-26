@@ -10,12 +10,12 @@ import sportbet.model.ParsedSelection;
 import sportbet.uid.UidGenerator;
 
 /**
- * מחלקה לולידציה של נתוני Parsed Markets
+ * Class for validation of Parsed Market data
  */
 public class ParsedMarketValidator {
 
     /**
-     * פרמטרים לולידציה של Parsed Market
+     * Parameters for Parsed Market validation
      */
     public static class ValidationParams {
         private final ParsedMarket parsedMarket;
@@ -36,10 +36,10 @@ public class ParsedMarketValidator {
     }
 
     /**
-     * מבצע ולידציה מלאה על Parsed Market
+     * Performs full validation on Parsed Market
      * 
-     * @param params פרמטרי הולידציה
-     * @throws DomainException אם הנתונים לא תקינים
+     * @param params validation parameters
+     * @throws DomainException if data is invalid
      */
     public void validate(ValidationParams params) {
         ParsedMarket market = params.getParsedMarket();
@@ -52,7 +52,7 @@ public class ParsedMarketValidator {
     }
 
     /**
-     * בודק תקינות Market UID
+     * Validates Market UID
      */
     private void validateMarketUid(String marketUid, boolean validateFormat) {
         if (marketUid == null || marketUid.trim().isEmpty()) {
@@ -65,7 +65,7 @@ public class ParsedMarketValidator {
     }
 
     /**
-     * בודק תקינות Market Type ID
+     * Validates Market Type ID
      */
     private void validateMarketTypeId(String marketTypeId) {
         if (marketTypeId == null || marketTypeId.trim().isEmpty()) {
@@ -83,14 +83,14 @@ public class ParsedMarketValidator {
     }
 
     /**
-     * בודק תקינות Specifiers
+     * Validates Specifiers
      */
     private void validateSpecifiers(java.util.Map<String, String> specifiers) {
         if (specifiers == null) {
             throw new DomainException(ErrorCode.VALIDATION_ERROR, "Specifiers cannot be null");
         }
 
-        // בדיקה שכל המפתחות והערכים תקינים
+        // Check that all keys and values are valid
         for (java.util.Map.Entry<String, String> entry : specifiers.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -106,7 +106,7 @@ public class ParsedMarketValidator {
     }
 
     /**
-     * בודק תקינות Selections
+     * Validates Selections
      */
     private void validateSelections(List<ParsedSelection> selections, String marketUid, boolean validateUids) {
         if (selections == null || selections.isEmpty()) {
@@ -120,7 +120,7 @@ public class ParsedMarketValidator {
     }
 
     /**
-     * בודק תקינות Selection בודד
+     * Validates individual Selection
      */
     private void validateSelection(ParsedSelection selection, int index, String marketUid, boolean validateUids) {
         if (selection == null) {

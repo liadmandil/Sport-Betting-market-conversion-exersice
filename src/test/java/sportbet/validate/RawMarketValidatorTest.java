@@ -17,7 +17,7 @@ import sportbet.model.RawMarket;
 import sportbet.model.RawSelection;
 
 /**
- * JUnit tests עבור RawMarketValidator
+ * JUnit tests for RawMarketValidator
  */
 class RawMarketValidatorTest {
 
@@ -28,7 +28,7 @@ class RawMarketValidatorTest {
     void setUp() {
         validator = new RawMarketValidator();
         
-        // יצירת market תקין לבדיקות
+        // Create valid market for testing
         validMarket = new RawMarket();
         validMarket.setName("1x2");
         validMarket.setEvent_id("123456");
@@ -49,18 +49,18 @@ class RawMarketValidatorTest {
     }
 
     @Test
-    @DisplayName("ולידציה של market תקין - אמור לעבור בהצלחה")
+    @DisplayName("Validation of valid market - should pass successfully")
     void validate_validMarket_success() {
         // Arrange
         RawMarketValidator.ValidationParams params = 
             new RawMarketValidator.ValidationParams(validMarket, false);
 
-        // Act & Assert - לא אמור לזרוק exception
+        // Act & Assert - should not throw exception
         assertDoesNotThrow(() -> validator.validate(params));
     }
 
     @Test
-    @DisplayName("שגיאה כאשר שם השוק הוא null")
+    @DisplayName("Error when market name is null")
     void validate_nullMarketName_throwsException() {
         // Arrange
         validMarket.setName(null);
@@ -75,7 +75,7 @@ class RawMarketValidatorTest {
     }
 
     @Test
-    @DisplayName("שגיאה כאשר שם השוק ריק")
+    @DisplayName("Error when market name is empty")
     void validate_emptyMarketName_throwsException() {
         // Arrange
         validMarket.setName("");
@@ -89,7 +89,7 @@ class RawMarketValidatorTest {
     }
 
     @Test
-    @DisplayName("שגיאה כאשר Event ID הוא null")
+    @DisplayName("Error when Event ID is null")
     void validate_nullEventId_throwsException() {
         // Arrange
         validMarket.setEvent_id(null);
@@ -104,7 +104,7 @@ class RawMarketValidatorTest {
     }
 
     @Test
-    @DisplayName("שגיאה כאשר אין selections")
+    @DisplayName("Error when there are no selections")
     void validate_noSelections_throwsException() {
         // Arrange
         validMarket.setSelections(null);
@@ -119,7 +119,7 @@ class RawMarketValidatorTest {
     }
 
     @Test
-    @DisplayName("שגיאה כאשר selections ריק")
+    @DisplayName("Error when selections is empty")
     void validate_emptySelections_throwsException() {
         // Arrange
         validMarket.setSelections(new ArrayList<>());
@@ -133,7 +133,7 @@ class RawMarketValidatorTest {
     }
 
     @Test
-    @DisplayName("שגיאה כאשר odds של selection קטן מ-1")
+    @DisplayName("Error when selection odds is less than 1")
     void validate_invalidOdds_throwsException() {
         // Arrange
         validMarket.getSelections().get(0).setOdds(0.5);
@@ -148,10 +148,10 @@ class RawMarketValidatorTest {
     }
 
     @Test
-    @DisplayName("ולידציה במצב strict - שם ארוך מדי")
+    @DisplayName("Validation in strict mode - name too long")
     void validate_strictMode_longMarketName_throwsException() {
         // Arrange
-        String longName = "a".repeat(101); // יותר מ-100 תווים
+        String longName = "a".repeat(101); // more than 100 characters
         validMarket.setName(longName);
         RawMarketValidator.ValidationParams params = 
             new RawMarketValidator.ValidationParams(validMarket, true);
@@ -164,7 +164,7 @@ class RawMarketValidatorTest {
     }
 
     @Test
-    @DisplayName("ולידציה במצב strict - Event ID לא חיובי")
+    @DisplayName("Validation in strict mode - Event ID not positive")
     void validate_strictMode_negativeEventId_throwsException() {
         // Arrange
         validMarket.setEvent_id("-123");

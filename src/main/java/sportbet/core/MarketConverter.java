@@ -60,7 +60,7 @@ public class MarketConverter {
     }
     
     /**
-     * חילוץ specifiers לפי סוג השוק
+     * Extract specifiers by market type
      */
 
     private Map<String, String> extractSpecifiers(RawMarket rawMarket, MarketType marketType) {
@@ -68,7 +68,7 @@ public class MarketConverter {
         
         switch (marketType.getSpecifierType()) {
             case NONE:
-                return specifiers; // Map ריק לשוקים ללא specifiers
+                return specifiers; // Empty Map for markets without specifiers
                 
             case TOTAL:
                 String totalValue = extractTotalValue(rawMarket);
@@ -86,7 +86,7 @@ public class MarketConverter {
     }
     
     /**
-     * יצירת market_uid מזהה אירוע, סוג שוק ו-specifiers
+     * Create market_uid from event ID, market type and specifiers
      */
     private String generateMarketUid(String eventId, String marketTypeId, Map<String, String> specifiers) {
         UidGenerator.MarketUidParams params = new UidGenerator.MarketUidParams(
@@ -98,35 +98,35 @@ public class MarketConverter {
     }
     
     /**
-     * חילוץ ערך Total (למשל "2.5" מתוך "over 2.5")
+     * Extract Total value (e.g., "2.5" from "over 2.5")
      */
     private String extractTotalValue(RawMarket rawMarket) {
-        // מחפש מספר בשם הראשון של selection
+        // Search for number in first selection name
         for (RawSelection selection : rawMarket.getSelections()) {
             String result = normalizer.extractTotalValue(selection.getName());
-            if (!result.equals("2.5")) { // אם לא ברירת מחדל
+            if (!result.equals("2.5")) { // If not default value
                 return result;
             }
         }
-        return "2.5"; // ברירת מחדל
+        return "2.5"; // Default value
     }
     
     /**
-     * חילוץ ערך Handicap (למשל "1.5" מתוך "Team A +1.5")
+     * Extract Handicap value (e.g., "1.5" from "Team A +1.5")
      */
     private String extractHandicapValue(RawMarket rawMarket) {
-        // מחפש מספר עם +/- בשם הראשון של selection
+        // Search for number with +/- in first selection name
         for (RawSelection selection : rawMarket.getSelections()) {
             String result = normalizer.extractHandicapValue(selection.getName());
-            if (!result.equals("0")) { // אם לא ברירת מחדל
+            if (!result.equals("0")) { // If not default value
                 return result;
             }
         }
-        return "0"; // ברירת מחדל
+        return "0"; // Default value
     }
     
     /**
-     * המרת רשימת selections מ-RawSelection ל-ParsedSelection
+     * Convert list of selections from RawSelection to ParsedSelection
      */
     private List<ParsedSelection> convertSelections(List<RawSelection> rawSelections, MarketType marketType, String marketUid) {
         List<ParsedSelection> parsedSelections = new ArrayList<>();
@@ -140,13 +140,13 @@ public class MarketConverter {
     }
     
     /**
-     * המרת selection יחיד מ-RawSelection ל-ParsedSelection
+     * Convert single selection from RawSelection to ParsedSelection
      */
     private ParsedSelection convertSelection(RawSelection rawSelection, MarketType marketType, String marketUid) {
-        // ניקוי שם הselection (הסרת מספרים וסימנים מיוחדים לצורך זיהוי)
+        // Clean selection name (remove numbers and special characters for identification)
         String cleanName = cleanSelectionName(rawSelection.getName());
         
-        // מציאת selection_type_id לפי השם המנוקה
+        // Find selection_type_id by cleaned name
         Optional<Integer> selectionTypeIdOpt = marketType.resolveSelectionTypeId(cleanName);
         
         if (selectionTypeIdOpt.isEmpty()) {
@@ -156,7 +156,7 @@ public class MarketConverter {
             );
         }
         
-        // יצירת selection_uid = market_uid + "_" + selection_type_id
+        // Create selection_uid = market_uid + "_" + selection_type_id
         String selectionUid = marketUid + "_" + selectionTypeIdOpt.get();
         
         return new ParsedSelection(
@@ -167,16 +167,16 @@ public class MarketConverter {
     }
     
     /**
-     * ניקוי שם selection להסרת מספרים וסימנים מיוחדים
-     * למשל: "Team A +1.5" -> "team a", "over 2.5" -> "over"
+     * Clean selection name to remove numbers and special characters
+     * For example: "Team A +1.5" -> "team a", "over 2.5" -> "over"
      */
     private String cleanSelectionName(String name) {
         String cleaned = name.toLowerCase().trim();
         
-        // הסרת מספרים וסימנים מיוחדים
+        // Remove numbers and special characters
         cleaned = cleaned.replaceAll("[+-]?\\d+(?:\\.\\d+)?", "").trim();
         
-        // הסרת רווחים מיותרים
+        // Remove extra spaces
         cleaned = cleaned.replaceAll("\\s+", " ").trim();
         
         return cleaned;

@@ -1,20 +1,21 @@
 package sportbet.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import sportbet.model.ParsedMarket;
-import sportbet.model.ParsedSelection;
-import sportbet.model.RawMarket;
-import sportbet.model.RawSelection;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import sportbet.model.ParsedMarket;
+import sportbet.model.ParsedSelection;
+import sportbet.model.RawMarket;
+import sportbet.model.RawSelection;
+
 /**
- * מחלקת בדיקה עבור MarketConverter
+ * Test class for MarketConverter
  */
 public class MarketConverterTest {
     
@@ -26,13 +27,13 @@ public class MarketConverterTest {
         System.out.println("        MARKET CONVERTER TEST");
         System.out.println("════════════════════════════════════════");
         
-        // בדיקת כל סוגי השוקים
+        // Test all market types
         allParsedMarkets.add(testOneXTwo(converter));
         allParsedMarkets.add(testTotal(converter));
         allParsedMarkets.add(testHandicap(converter));
         allParsedMarkets.add(testBTTS(converter));
         
-        // יצוא לקובץ JSON
+        // Export to JSON file
         exportToJson(allParsedMarkets);
         
         System.out.println("════════════════════════════════════════");
@@ -186,7 +187,7 @@ public class MarketConverterTest {
     }
     
     /**
-     * יצוא התוצאות לקובץ JSON
+     * Export results to JSON file
      */
     private static void exportToJson(List<ParsedMarket> markets) {
         System.out.println("\n┌─────────────────────────────────────────┐");
@@ -197,7 +198,7 @@ public class MarketConverterTest {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             
-            // יצירת קובץ פלט
+            // Create output file
             File outputFile = new File("converted_markets_output.json");
             mapper.writeValue(outputFile, markets);
             
@@ -205,7 +206,7 @@ public class MarketConverterTest {
             System.out.println("📁 File saved: " + outputFile.getAbsolutePath());
             System.out.println("📊 Markets exported: " + markets.size());
             
-            // הדפסת JSON לקונסול
+            // Print JSON to console
             String jsonString = mapper.writeValueAsString(markets);
             System.out.println("\n🔍 JSON Content:");
             System.out.println("─".repeat(50));
