@@ -1,26 +1,14 @@
 package sportbet.domain;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
-/**
- * MarketType is the domain "source of truth".
- * For each market it holds:
- *  - the internal market_type_id (as specified by the exercise)
- *  - the specifier kind (NONE / TOTAL / HCP)
- *  - a normalized selection-name -> selection_type_id map
- *  - a set of normalized aliases for resolving the market from its name
- *
- * It also provides helpers:
- *  - fromName(String) to resolve a MarketType by its display name
- *  - resolveSelectionTypeId(String) to map a selection label to its ID
- *
- * Notes:
- *  - Totals for full time (18) and 1st half (68) share the same selection IDs (Over=12, Under=13).
- *  - Handicaps for full time (16), 1st half (66), 2nd half (88) share the same selection IDs
- *    (Team A=1714, Team B=1715).
- *  - 1x2 (1) -> Team A=1, Draw=2, Team B=3.
- *  - BTTS (50) -> Yes=10, No=11.
- */
+// Market types with their IDs, selection mappings and name aliases
 public enum MarketType {
 
     ONE_X_TWO(
@@ -87,64 +75,59 @@ public enum MarketType {
         this.aliasSet = Collections.unmodifiableSet(normalizeAliases(rawAliases));
     }
 
-    /** Returns the internal market_type_id (e.g., "18" for Total). */
+    // Returns market type ID
     public String getTypeId() {
         return typeId;
     }
 
-    /** Returns the specifier kind this market expects (NONE / TOTAL / HCP). */
+    // Returns specifier type (NONE/TOTAL/HCP)
     public SpecifierType getSpecifierType() {
         return specifierType;
     }
 
-    /**
-     * Resolves a selection's textual label to its selection_type_id, if known.
-     * The input is normalized (trim/lowercase and simple aliases like "o"/"u" -> "over"/"under").
-     */
+    // Maps selection name to selection type ID
     public Optional<Integer> resolveSelectionTypeId(String selectionName) {
         String key = normalizeSelection(selectionName);
         return Optional.ofNullable(selectionMap.get(key));
     }
 
-    /**
-     * Resolves a MarketType from a market display name using normalized aliases.
-     * Example: "Total" -> TOTAL, "1st half - handicap" -> FIRST_HALF_HANDICAP.
-     */
+    // Finds market type by exact name match
     public static Optional<MarketType> fromName(String marketName) {
         if (marketName == null) return Optional.empty();
         String n = normalizeBasic(marketName);
         for (MarketType mt : values()) {
-            if (mt.aliasSet.contains(n)) return Optional.of(mt);
+            for (String alias : mt.aliasSet) {
+                if (alias.equals(n)) return Optional.of(mt);
+            }
         }
         return Optional.empty();
     }
 
-    // ---- Normalization helpers ----
-
+    // Normalize selection map and add short aliases
     private static Map<String, Integer> normalizeSelectionMap(Map<String, Integer> src) {
         Map<String, Integer> out = new HashMap<>();
         src.forEach((k, v) -> out.put(normalizeBasic(k), v));
-        // also support short aliases for totals:
-        // e.g., "o" -> "over", "u" -> "under"
         if (out.containsKey("over") && !out.containsKey("o")) out.put("o", out.get("over"));
         if (out.containsKey("under") && !out.containsKey("u")) out.put("u", out.get("under"));
         return out;
     }
 
+    // Normalize aliases to lowercase
     private static Set<String> normalizeAliases(List<String> aliases) {
         Set<String> s = new HashSet<>();
         for (String a : aliases) s.add(normalizeBasic(a));
         return s;
     }
 
+    // Handle short aliases for selections
     private static String normalizeSelection(String s) {
         String n = normalizeBasic(s);
-        // map common short forms to canonical keys
         if (n.equals("o")) return "over";
         if (n.equals("u")) return "under";
         return n;
     }
 
+    // Basic normalization: trim and lowercase
     private static String normalizeBasic(String s) {
         return (s == null) ? "" : s.trim().toLowerCase();
     }

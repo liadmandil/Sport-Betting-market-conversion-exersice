@@ -14,23 +14,16 @@ import sportbet.model.RawSelection;
 import sportbet.normalize.MarketNormalizer;
 import sportbet.uid.UidGenerator;
 
-/**
- * Main class for converting markets from RawMarket to ParsedMarket
- * Includes dictionary for all market types and logic for extracting specifiers
- */
+// Converts raw markets to parsed markets with UIDs and specifiers
 public class MarketConverter {
     
-    private final UidGenerator uidGenerator;
     private final MarketNormalizer normalizer;
     
     public MarketConverter() {
-        this.uidGenerator = new UidGenerator();
         this.normalizer = new MarketNormalizer();
     }
     
-    /**
-     * Converts RawMarket to ParsedMarket
-     */
+    // Main conversion method
     public ParsedMarket convert(RawMarket rawMarket) {
         // Find market type by name
         Optional<MarketType> marketTypeOpt = MarketType.fromName(rawMarket.getName());
@@ -59,35 +52,27 @@ public class MarketConverter {
         );
     }
     
-    /**
-     * Extract specifiers by market type
-     */
-
+    // Extract specifiers based on market type
     private Map<String, String> extractSpecifiers(RawMarket rawMarket, MarketType marketType) {
         Map<String, String> specifiers = new HashMap<>();
         
         switch (marketType.getSpecifierType()) {
             case NONE:
-                return specifiers; // Empty Map for markets without specifiers
-                
+                return specifiers;
             case TOTAL:
                 String totalValue = extractTotalValue(rawMarket);
                 specifiers.put("total", totalValue);
                 return specifiers;
-                
             case HCP:
                 String hcpValue = extractHandicapValue(rawMarket);
                 specifiers.put("hcp", hcpValue);
                 return specifiers;
-                
             default:
                 return specifiers;
         }
     }
     
-    /**
-     * Create market_uid from event ID, market type and specifiers
-     */
+    // Generate market UID
     private String generateMarketUid(String eventId, String marketTypeId, Map<String, String> specifiers) {
         UidGenerator.MarketUidParams params = new UidGenerator.MarketUidParams(
             eventId, 
@@ -97,37 +82,29 @@ public class MarketConverter {
         return UidGenerator.generateMarketUid(params);
     }
     
-    /**
-     * Extract Total value (e.g., "2.5" from "over 2.5")
-     */
+    // Extract total value from selection names
     private String extractTotalValue(RawMarket rawMarket) {
-        // Search for number in first selection name
         for (RawSelection selection : rawMarket.getSelections()) {
             String result = normalizer.extractTotalValue(selection.getName());
-            if (!result.equals("2.5")) { // If not default value
+            if (!result.equals("0")) {
                 return result;
             }
         }
-        return "2.5"; // Default value
+        return "0";
     }
     
-    /**
-     * Extract Handicap value (e.g., "1.5" from "Team A +1.5")
-     */
+    // Extract handicap value from selection names
     private String extractHandicapValue(RawMarket rawMarket) {
-        // Search for number with +/- in first selection name
         for (RawSelection selection : rawMarket.getSelections()) {
             String result = normalizer.extractHandicapValue(selection.getName());
-            if (!result.equals("0")) { // If not default value
+            if (!result.equals("0")) {
                 return result;
             }
         }
-        return "0"; // Default value
+        return "0";
     }
     
-    /**
-     * Convert list of selections from RawSelection to ParsedSelection
-     */
+    // Convert all selections
     private List<ParsedSelection> convertSelections(List<RawSelection> rawSelections, MarketType marketType, String marketUid) {
         List<ParsedSelection> parsedSelections = new ArrayList<>();
         
@@ -139,14 +116,9 @@ public class MarketConverter {
         return parsedSelections;
     }
     
-    /**
-     * Convert single selection from RawSelection to ParsedSelection
-     */
+    // Convert single selection
     private ParsedSelection convertSelection(RawSelection rawSelection, MarketType marketType, String marketUid) {
-        // Clean selection name (remove numbers and special characters for identification)
         String cleanName = cleanSelectionName(rawSelection.getName());
-        
-        // Find selection_type_id by cleaned name
         Optional<Integer> selectionTypeIdOpt = marketType.resolveSelectionTypeId(cleanName);
         
         if (selectionTypeIdOpt.isEmpty()) {
@@ -156,7 +128,6 @@ public class MarketConverter {
             );
         }
         
-        // Create selection_uid = market_uid + "_" + selection_type_id
         String selectionUid = marketUid + "_" + selectionTypeIdOpt.get();
         
         return new ParsedSelection(
@@ -166,19 +137,11 @@ public class MarketConverter {
         );
     }
     
-    /**
-     * Clean selection name to remove numbers and special characters
-     * For example: "Team A +1.5" -> "team a", "over 2.5" -> "over"
-     */
+    // Remove numbers and special characters from selection name
     private String cleanSelectionName(String name) {
         String cleaned = name.toLowerCase().trim();
-        
-        // Remove numbers and special characters
         cleaned = cleaned.replaceAll("[+-]?\\d+(?:\\.\\d+)?", "").trim();
-        
-        // Remove extra spaces
         cleaned = cleaned.replaceAll("\\s+", " ").trim();
-        
         return cleaned;
     }
 }

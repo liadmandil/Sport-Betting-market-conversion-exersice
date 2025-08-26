@@ -3,12 +3,7 @@ package sportbet.model;
 import java.util.List;
 import java.util.Map;
 
-/**
- * ParsedMarket is the normalized/internal representation of a market after conversion.
- * It includes the market_type_id, specifiers, a deterministic market_uid,
- * and the list of parsed selections.
- */
-
+// Parsed market with UID, type ID, specifiers and selections
 public class ParsedMarket {
     private String market_uid;
     private String market_type_id;

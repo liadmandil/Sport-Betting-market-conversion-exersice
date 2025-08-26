@@ -1,10 +1,7 @@
 package sportbet.model;
 import java.util.List;
 
-/**
- * RawMarket mirrors a single market object from the input JSON.
- * Contains the market name, event_id, and the raw selections list.
- */
+// Raw market data from input JSON
 public class RawMarket {
     private String name;
     private String event_id;

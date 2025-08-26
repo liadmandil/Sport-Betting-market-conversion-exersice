@@ -4,14 +4,10 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Class for cleaning and normalizing market data
- */
+// Normalizes and cleans market data
 public class MarketNormalizer {
 
-    /**
-     * Parameters for cleaning selection name
-     */
+    // Parameters for cleaning selection names
     public static class SelectionNameParams {
         private final String selectionName;
         private final boolean removeNumbers;

@@ -46,47 +46,47 @@
     "decimal_odds" : 1.7
   } ]
 }, {
-  "market_uid" : "123456_16_1.5",
+  "market_uid" : "123456_16_+1.5",
   "market_type_id" : "16",
   "specifiers" : {
-    "hcp" : "1.5"
+    "hcp" : "+1.5"
   },
   "selections" : [ {
-    "selection_uid" : "123456_16_1.5_1714",
+    "selection_uid" : "123456_16_+1.5_1714",
     "selection_type_id" : "1714",
     "decimal_odds" : 1.8
   }, {
-    "selection_uid" : "123456_16_1.5_1715",
+    "selection_uid" : "123456_16_+1.5_1715",
     "selection_type_id" : "1715",
     "decimal_odds" : 2.0
   } ]
 }, {
-  "market_uid" : "123456_66_0.5",
+  "market_uid" : "123456_66_+0.5",
   "market_type_id" : "66",
   "specifiers" : {
-    "hcp" : "0.5"
+    "hcp" : "+0.5"
   },
   "selections" : [ {
-    "selection_uid" : "123456_66_0.5_1714",
+    "selection_uid" : "123456_66_+0.5_1714",
     "selection_type_id" : "1714",
     "decimal_odds" : 1.9
   }, {
-    "selection_uid" : "123456_66_0.5_1715",
+    "selection_uid" : "123456_66_+0.5_1715",
     "selection_type_id" : "1715",
     "decimal_odds" : 1.9
   } ]
 }, {
-  "market_uid" : "123456_88_1",
+  "market_uid" : "123456_88_+1",
   "market_type_id" : "88",
   "specifiers" : {
-    "hcp" : "1"
+    "hcp" : "+1"
   },
   "selections" : [ {
-    "selection_uid" : "123456_88_1_1714",
+    "selection_uid" : "123456_88_+1_1714",
     "selection_type_id" : "1714",
     "decimal_odds" : 2.05
   }, {
-    "selection_uid" : "123456_88_1_1715",
+    "selection_uid" : "123456_88_+1_1715",
     "selection_type_id" : "1715",
     "decimal_odds" : 1.75
   } ]

@@ -1,9 +1,6 @@
 package sportbet.model;
 
-/**
- * ParsedSelection is the normalized/internal representation of a single selection.
- * It contains the resolved selection_type_id, a deterministic selection_uid, and decimal_odds.
- */
+// Parsed selection with UID, type ID and odds
 public class ParsedSelection {
     private String selection_uid;
     private String selection_type_id;

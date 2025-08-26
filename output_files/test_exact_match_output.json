@@ -1,0 +1,16 @@
+[ {
+  "market_uid" : "111111_18_2.5",
+  "market_type_id" : "18",
+  "specifiers" : {
+    "total" : "2.5"
+  },
+  "selections" : [ {
+    "selection_uid" : "111111_18_2.5_12",
+    "selection_type_id" : "12",
+    "decimal_odds" : 1.85
+  }, {
+    "selection_uid" : "111111_18_2.5_13",
+    "selection_type_id" : "13",
+    "decimal_odds" : 1.95
+  } ]
+} ]

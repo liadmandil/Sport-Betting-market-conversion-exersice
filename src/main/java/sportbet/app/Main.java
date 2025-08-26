@@ -15,6 +15,7 @@ import sportbet.io.JacksonListMarketReader;
 import sportbet.model.ParsedMarket;
 import sportbet.model.RawMarket;
 
+// Main application entry point for market conversion
 public class Main {
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -27,6 +28,7 @@ public class Main {
         try {
             // Ensure output directory exists
             FilePathResolver.ensureOutputDirectoryExists(); 
+
             
             // Resolve input and output paths
             String inputFilename = args[0];
@@ -42,11 +44,11 @@ public class Main {
             JacksonListMarketReader reader = new JacksonListMarketReader();
             List<RawMarket> rawMarkets = reader.read(inputPath);
             
+            
 
             System.out.println("=== Market Conversion ===");
             System.out.println("Loaded " + rawMarkets.size() + " markets:");
             
-
             // Convert markets
             MarketConverter converter = new MarketConverter();
             List<ParsedMarket> parsedMarkets = new ArrayList<>();
@@ -64,7 +66,7 @@ public class Main {
                 }
             }
             
-            // Write JSON output
+            // Write output and display results
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             
@@ -78,9 +80,6 @@ public class Main {
             // Print JSON content to console as well
             System.out.println("\n=== JSON File Content ===");
             System.out.println(mapper.writeValueAsString(parsedMarkets));
-            
-
-
 
         } catch (MissingFileException e) {
             System.err.println("File error: " + e.getMessage());

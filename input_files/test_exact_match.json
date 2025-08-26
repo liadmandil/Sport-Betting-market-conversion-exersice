@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Total",
+    "event_id": "111111",
+    "selections": [
+      {
+        "name": "over 2.5",
+        "odds": 1.85
+      },
+      {
+        "name": "under 2.5",
+        "odds": 1.95
+      }
+    ]
+  },
+  {
+    "name": "Unknown Market Total 2",
+    "event_id": "222222",
+    "selections": [
+      {
+        "name": "something",
+        "odds": 2.0
+      }
+    ]
+  }
+]
