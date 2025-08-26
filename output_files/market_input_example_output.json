@@ -1,0 +1,106 @@
+[ {
+  "market_uid" : "123456_1",
+  "market_type_id" : "1",
+  "specifiers" : { },
+  "selections" : [ {
+    "selection_uid" : "123456_1_1",
+    "selection_type_id" : 1,
+    "decimal_odds" : 1.65
+  }, {
+    "selection_uid" : "123456_1_2",
+    "selection_type_id" : 2,
+    "decimal_odds" : 3.2
+  }, {
+    "selection_uid" : "123456_1_3",
+    "selection_type_id" : 3,
+    "decimal_odds" : 2.6
+  } ]
+}, {
+  "market_uid" : "123456_18_2.5",
+  "market_type_id" : "18",
+  "specifiers" : {
+    "total" : "2.5"
+  },
+  "selections" : [ {
+    "selection_uid" : "123456_18_2.5_12",
+    "selection_type_id" : 12,
+    "decimal_odds" : 1.85
+  }, {
+    "selection_uid" : "123456_18_2.5_13",
+    "selection_type_id" : 13,
+    "decimal_odds" : 1.95
+  } ]
+}, {
+  "market_uid" : "123456_68_1.5",
+  "market_type_id" : "68",
+  "specifiers" : {
+    "total" : "1.5"
+  },
+  "selections" : [ {
+    "selection_uid" : "123456_68_1.5_12",
+    "selection_type_id" : 12,
+    "decimal_odds" : 2.1
+  }, {
+    "selection_uid" : "123456_68_1.5_13",
+    "selection_type_id" : 13,
+    "decimal_odds" : 1.7
+  } ]
+}, {
+  "market_uid" : "123456_16_1.5",
+  "market_type_id" : "16",
+  "specifiers" : {
+    "hcp" : "1.5"
+  },
+  "selections" : [ {
+    "selection_uid" : "123456_16_1.5_1714",
+    "selection_type_id" : 1714,
+    "decimal_odds" : 1.8
+  }, {
+    "selection_uid" : "123456_16_1.5_1715",
+    "selection_type_id" : 1715,
+    "decimal_odds" : 2.0
+  } ]
+}, {
+  "market_uid" : "123456_66_0.5",
+  "market_type_id" : "66",
+  "specifiers" : {
+    "hcp" : "0.5"
+  },
+  "selections" : [ {
+    "selection_uid" : "123456_66_0.5_1714",
+    "selection_type_id" : 1714,
+    "decimal_odds" : 1.9
+  }, {
+    "selection_uid" : "123456_66_0.5_1715",
+    "selection_type_id" : 1715,
+    "decimal_odds" : 1.9
+  } ]
+}, {
+  "market_uid" : "123456_88_1",
+  "market_type_id" : "88",
+  "specifiers" : {
+    "hcp" : "1"
+  },
+  "selections" : [ {
+    "selection_uid" : "123456_88_1_1714",
+    "selection_type_id" : 1714,
+    "decimal_odds" : 2.05
+  }, {
+    "selection_uid" : "123456_88_1_1715",
+    "selection_type_id" : 1715,
+    "decimal_odds" : 1.75
+  } ]
+}, {
+  "market_uid" : "123456_50",
+  "market_type_id" : "50",
+  "specifiers" : { },
+  "selections" : [ {
+    "selection_uid" : "123456_50_10",
+    "selection_type_id" : 10,
+    "decimal_odds" : 1.7
+  }, {
+    "selection_uid" : "123456_50_11",
+    "selection_type_id" : 11,
+    "decimal_odds" : 2.1
+  } ]
+} ]

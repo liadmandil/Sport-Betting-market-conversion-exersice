@@ -1,7 +1,6 @@
 package sportbet.app;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import sportbet.core.MarketConverter;
+import sportbet.io.FilePathResolver;
 import sportbet.io.JacksonListMarketReader;
 import sportbet.model.ParsedMarket;
 import sportbet.model.RawMarket;
@@ -16,14 +16,28 @@ import sportbet.model.RawMarket;
 public class Main {
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Usage: java -jar market-conversion.jar <input-file> [output-file]");
+            System.out.println("Usage: java -jar market-conversion.jar <filename>");
+            System.out.println("  The file will be searched in input_files directory");
+            System.out.println("  Output will be saved in output_files directory with '_output' suffix");
             System.exit(1);
         }
 
         try {
+            // Ensure output directory exists
+            FilePathResolver.ensureOutputDirectoryExists();
+            
+            // Resolve input and output paths
+            String inputFilename = args[0];
+            Path inputPath = FilePathResolver.resolveInputPath(inputFilename);
+            Path outputPath = FilePathResolver.resolveOutputPath(inputFilename);
+            
+            System.out.println("=== Market Conversion ===");
+            System.out.println("Input file: " + inputPath.toAbsolutePath());
+            System.out.println("Output file: " + outputPath.toAbsolutePath());
+            
             // Read input file
             JacksonListMarketReader reader = new JacksonListMarketReader();
-            List<RawMarket> rawMarkets = reader.read(Paths.get(args[0]));
+            List<RawMarket> rawMarkets = reader.read(inputPath);
             
             System.out.println("=== Market Conversion ===");
             System.out.println("Loaded " + rawMarkets.size() + " markets:");
@@ -50,9 +64,6 @@ public class Main {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             
-            String outputFile = args.length > 1 ? args[1] : "converted_markets.json";
-            Path outputPath = Paths.get(outputFile);
-            
             mapper.writeValue(outputPath.toFile(), parsedMarkets);
             
             System.out.println("\n=== Summary ===");
@@ -65,7 +76,6 @@ public class Main {
             
         } catch (Exception e) {
             System.err.println("Error: " + e.getMessage());
-            e.printStackTrace();
             System.exit(1);
         }
     }

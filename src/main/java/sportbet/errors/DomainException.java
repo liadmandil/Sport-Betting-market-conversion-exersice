@@ -1,8 +1,7 @@
 package sportbet.errors;
 
 /**
- * DomainException is a base unchecked exception that carries an ErrorCode.
- * Specific exceptions should extend this class and set an appropriate code.
+   DomainException is a base unchecked exception that carries an ErrorCode.
  */
 public class DomainException extends RuntimeException {
     private final ErrorCode code;

@@ -1,0 +1,104 @@
+[
+  {
+    "name": "1x2",
+    "event_id": "123456",
+    "selections": [
+      {
+        "name": "Team A",
+        "odds": 1.65
+      },
+      {
+        "name": "draw",
+        "odds": 3.2
+      },
+      {
+        "name": "Team B",
+        "odds": 2.6
+      }
+    ]
+  },
+  {
+    "name": "Total",
+    "event_id": "123456",
+    "selections": [
+      {
+        "name": "over 2.5",
+        "odds": 1.85
+      },
+      {
+        "name": "under 2.5",
+        "odds": 1.95
+      }
+    ]
+  },
+  {
+    "name": "1st half - total",
+    "event_id": "123456",
+    "selections": [
+      {
+        "name": "over 1.5",
+        "odds": 2.1
+      },
+      {
+        "name": "under 1.5",
+        "odds": 1.7
+      }
+    ]
+  },
+  {
+    "name": "Handicap",
+    "event_id": "123456",
+    "selections": [
+      {
+        "name": "Team A +1.5",
+        "odds": 1.8
+      },
+      {
+        "name": "Team B -1.5",
+        "odds": 2.0
+      }
+    ]
+  },
+  {
+    "name": "1st half - handicap",
+    "event_id": "123456",
+    "selections": [
+      {
+        "name": "Team A +0.5",
+        "odds": 1.9
+      },
+      {
+        "name": "Team B -0.5",
+        "odds": 1.9
+      }
+    ]
+  },
+  {
+    "name": "2nd half - handicap",
+    "event_id": "123456",
+    "selections": [
+      {
+        "name": "Team A +1",
+        "odds": 2.05
+      },
+      {
+        "name": "Team B -1",
+        "odds": 1.75
+      }
+    ]
+  },
+  {
+    "name": "Both teams to score",
+    "event_id": "123456",
+    "selections": [
+      {
+        "name": "Yes",
+        "odds": 1.7
+      },
+      {
+        "name": "No",
+        "odds": 2.1
+      }
+    ]
+  }
+]

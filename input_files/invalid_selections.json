@@ -1,0 +1,10 @@
+[
+  {
+    "name": "1x2",
+    "event_id": "123456",
+    "selections": [
+      {"name": "Invalid Selection", "odds": 1.5},
+      {"name": "Another Bad Selection", "odds": 2.5}
+    ]
+  }
+]

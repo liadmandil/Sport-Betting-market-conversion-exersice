@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Unknown Market Type",
+    "event_id": "123456",
+    "selections": [
+      {"name": "Option 1", "odds": 1.5},
+      {"name": "Option 2", "odds": 2.5}
+    ]
+  }
+]
